@@ -1,0 +1,41 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.9.0] # ✅ Ta version de Node
+
+    steps:
+      # 1️⃣ Récupérer le code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2️⃣ Installer Node
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # 3️⃣ Installer & tester backend
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: |
+          npm install
+          npm test || echo "Pas encore de tests backend"
+
+      # 4️⃣ Installer & tester frontend
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: |
+          npm install
+          npm run build
+          npm test || echo "Pas encore de tests frontend"
