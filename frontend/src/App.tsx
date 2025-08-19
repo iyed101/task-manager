@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import { useState, useEffect } from "react"
 import axios from "axios"
 import {
@@ -13,7 +14,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-const API_URL = "http://localhost:5000/api/tasks"
+// const API_URL = "http://localhost:5000/api/tasks"
 
 const taskSchema = z.object({
   nomTask: z.string().min(1, "Le nom de la tâche est requis"),
@@ -42,7 +43,7 @@ export default function App() {
 
   const fetchTasks = async () => {
     try {
-      const { data } = await axios.get(API_URL)
+      const { data } = await axios.get(`${API_URL}/api/tasks`)
       setTasks(data)
     } catch (error) {
       console.error("Erreur fetch tasks:", error)
@@ -65,13 +66,13 @@ export default function App() {
     try {
       if (selectedTask) {
         // 🔹 Modifier
-        const { data: updatedTask } = await axios.put(`${API_URL}/${selectedTask.id}`, data)
+        const { data: updatedTask } = await axios.put(`${API_URL}/api/tasks/${selectedTask.id}`, data)
         setTasks((prev) =>
           prev.map((t) => (t.id === updatedTask.id ? updatedTask : t))
         )
       } else {
         // 🔹 Ajouter
-        const { data: newTask } = await axios.post(API_URL, data)
+        const { data: newTask } = await axios.post(`${API_URL}/api/tasks`, data)
         setTasks((prev) => [...prev, newTask])
       }
       setDialogOpen(false)
@@ -83,7 +84,7 @@ export default function App() {
 
   const deleteTask = async (id: number) => {
     try {
-      await axios.delete(`${API_URL}/${id}`)
+      await axios.delete(`${API_URL}/api/tasks/${id}`)
       setTasks((prev) => prev.filter((t) => t.id !== id))
     } catch (error) {
       console.error("Erreur delete task:", error)
@@ -92,7 +93,7 @@ export default function App() {
 
   const toggleComplete = async (task: Task) => {
     try {
-      const { data: updated } = await axios.patch(`${API_URL}/${task.id}/complete`)
+      const { data: updated } = await axios.patch(`${API_URL}/api/tasks/${task.id}/complete`)
       setTasks((prev) =>
         prev.map((t) => (t.id === task.id ? updated.task : t))
       )

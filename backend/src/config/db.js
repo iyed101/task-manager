@@ -1,9 +1,8 @@
 import { Sequelize } from "sequelize";
 
-const sequelize = new Sequelize("task_manager", "root", "", {
-    host: "localhost",
-    dialect: "mysql",
-    logging: false, // Désactive les logs SQL (optionnel)
+const sequelize = new Sequelize(process.env.MYSQL_PUBLIC_URL, {
+  dialect: "mysql",
+  logging: false,
 });
 
 export default sequelize;

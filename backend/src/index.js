@@ -1,14 +1,19 @@
+import 'dotenv/config'; // 🔹 doit être en premier
 import express from "express";
-import sequelize from "./config/db.js";  // connexion MySQL
+import sequelize from "./config/db.js";  
 import cors from "cors";     
 import taskRoutes from "./routes/taskRoutes.js";
 
-const app = express();
-const PORT = 5000;
 
-// Middleware CORS pour autoriser uniquement localhost:5173
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+const allowedOrigins = [
+    "http://localhost:5173",
+    process.env.FRONTEND_URL,       
+].filter(Boolean);
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: allowedOrigins,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true, // si tu utilises cookies/auth
 }));
@@ -29,7 +34,7 @@ const startServer = async () => {
     try {
         // Connexion MySQL
         await sequelize.authenticate();
-        console.log("✅ Connexion MySQL réussie !");
+        console.log("✅ Connexion MySQL Railway réussie !");
 
         // Synchronisation (crée la DB et la table si elles n'existent pas)
         await sequelize.sync({ alter: true }); 
