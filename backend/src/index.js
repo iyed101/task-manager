@@ -9,7 +9,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
-    "https://task-manager-seven-gilt-62.vercel.app ",     
+    "http://localhost:5173", // pour tester en local
+  "https://task-manager-seven-gilt-62.vercel.app", // ton front déployé    
 ].filter(Boolean);
 app.use(cors({
     origin: allowedOrigins,
