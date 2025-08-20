@@ -105,7 +105,7 @@ export default function App() {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-blue-100 w-full px-6">
       {/* Tableau */}
-      <div className="border border-black rounded-2xl shadow-lg p-6 bg-white w-full max-w-4xl">
+      <div className="border border-black rounded-2xl shadow-lg p-6 bg-white w-full sm:max-w-4xl">
         <Table>
           <TableHeader>
             <TableRow>
